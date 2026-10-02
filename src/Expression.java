@@ -1,0 +1,2 @@
+sealed public interface Expression {
+}
