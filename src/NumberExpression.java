@@ -1,2 +1,2 @@
-public record NumberExpression() {
+public record NumberExpression(double value) implements Expression{
 }

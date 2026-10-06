@@ -1,2 +1,4 @@
-sealed public interface Expression {
+sealed public interface Expression
+        permits NumberExpression, VariableExpression,
+        UnaryExpression, BinaryExpression, FunctionExpression {
 }
