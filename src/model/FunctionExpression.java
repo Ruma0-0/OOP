@@ -1,3 +1,5 @@
+package model;
+
 import java.util.List;
 
 public record FunctionExpression(FunctionName function, List<Expression> arguments) implements Expression {
