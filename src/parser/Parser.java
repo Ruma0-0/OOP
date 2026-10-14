@@ -1,10 +1,13 @@
 package parser;
 
+import exceptions.ExpressionException;
 import exceptions.ParseException;
 import model.*;
 
+import java.util.ArrayList;
+
 public class Parser {
-    private String input;
+    private final String input;
     private int position;
 
     public Parser(String input) {
@@ -45,18 +48,18 @@ public class Parser {
     }
 
     private Expression parseMultiplicative() {
-        var left = parsePrimary();
+        var left = parseUnary();
         while (true) {
             skipSpaces();
 
             if (peek() == '*') {
                 consume('*');
-                var right = parsePrimary();
+                var right = parseUnary();
 
                 left = new BinaryExpression(BinaryOperator.MULTIPLY, left, right);
             } else if (peek() == '/') {
                 consume('/');
-                var right = parsePrimary();
+                var right = parseUnary();
 
                 left = new BinaryExpression(BinaryOperator.DIVIDE, left, right);
             } else {
@@ -98,6 +101,61 @@ public class Parser {
         throw new ParseException("Неожиданный символ " + current, position);
     }
 
+    private Expression parsePower() {
+        var left = parsePrimary();
+
+        skipSpaces();
+
+        if (peek() == '^') {
+            consume('^');
+
+            var right = parseUnary();
+
+            return new BinaryExpression(BinaryOperator.POWER, left, right);
+        }
+        return left;
+    }
+
+    private Expression parseUnary() {
+        skipSpaces();
+
+        if (peek() == '-') {
+            consume('-');
+
+            var operand = parsePower();
+            return new UnaryExpression(UnaryOperator.NEGATE, operand);
+        }
+
+        return parsePower();
+    }
+
+    private Expression parseFunction(String name) {
+        var function = FunctionName.fromString(name);
+
+        consume('(');
+
+        var arguments = new ArrayList<Expression>();
+
+        skipSpaces();
+
+        if (peek() != ')') {
+            arguments.add(parseAdditive());
+            skipSpaces();
+
+            while (peek() == ',') {
+                consume(',');
+                arguments.add(parseAdditive());
+                skipSpaces();
+            }
+
+            skipSpaces();
+        }
+        consume(')');
+        function.checkArgumentCount(arguments.size());
+
+        return new FunctionExpression(function, arguments);
+    }
+
     private Expression parseNumber() {
         int start = position;
 
@@ -109,8 +167,11 @@ public class Parser {
                 && input.charAt(position) == '.') {
             position++;
 
-            while (position < input.length()
-                    && Character.isDigit(input.charAt(position))) {
+            if (position >= input.length() || !Character.isDigit(input.charAt(position))) {
+                throw new ParseException("Ожидалось число после .", position);
+            }
+
+            while (position < input.length() && Character.isDigit(input.charAt(position))) {
                 position++;
             }
         }
@@ -129,6 +190,11 @@ public class Parser {
 
         var name = input.substring(start, position);
 
+        skipSpaces();
+        if (peek() == '(') {
+            return parseFunction(name);
+        }
+
         return new VariableExpression(name);
     }
 
@@ -139,7 +205,7 @@ public class Parser {
     }
 
     private void consume(char expected) {
-        if(position >= input.length() || input.charAt(position) == expected) {
+        if(position >= input.length() || input.charAt(position) != expected) {
             throw new ParseException("Ожидался символ: " + expected, position);
         }
 
