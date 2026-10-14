@@ -1,3 +1,5 @@
+package exceptions;
+
 public class ParseException extends ExpressionException {
     private final int position;
 
