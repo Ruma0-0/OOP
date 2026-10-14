@@ -1,5 +1,5 @@
 public class DivisionByZeroException extends ExpressionException {
-    public DivisionByZeroException(int position) {
-        super("Деление на ноль в позиции " + position);
+    public DivisionByZeroException() {
+        super("Обнаружено деление на ноль.");
     }
 }
