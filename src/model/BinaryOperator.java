@@ -1,5 +1,7 @@
 package model;
 
+import exceptions.DivisionByZeroException;
+
 public enum BinaryOperator {
     ADD(3, Associativity.LEFT) {
         @Override
@@ -23,6 +25,9 @@ public enum BinaryOperator {
     DIVIDE(2, Associativity.LEFT) {
         @Override
         public double calculate(double a, double b) {
+            if (b == 0) {
+                throw new DivisionByZeroException();
+            }
             return a / b;
         }
     },
@@ -40,7 +45,7 @@ public enum BinaryOperator {
         this.priority = priority;
         this.associativity = associativity;
     }
-    abstract double calculate(double a, double b);
+    public abstract double calculate(double a, double b);
 
     public int getPriority() {
         return priority;
