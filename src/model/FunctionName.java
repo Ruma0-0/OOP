@@ -35,9 +35,9 @@ public enum FunctionName {
         return argumentCount;
     }
 
-    public void checkArgumentCount(int actualCount) {
+    public void checkArgumentCount(int actualCount, int position) {
         if(argumentCount != actualCount) {
-            throw new ExpressionException(String.format("Функция %s ожидает %d аргументов. Передано %d.", text, argumentCount, actualCount));
+            throw new ParseException(String.format("Функция %s ожидает %d аргументов. Передано %d.", text, argumentCount, actualCount), position);
         }
     }
 }

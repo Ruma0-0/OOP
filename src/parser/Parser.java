@@ -151,7 +151,7 @@ public class Parser {
             skipSpaces();
         }
         consume(')');
-        function.checkArgumentCount(arguments.size());
+        function.checkArgumentCount(arguments.size(), position);
 
         return new FunctionExpression(function, arguments);
     }
