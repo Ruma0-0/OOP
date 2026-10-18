@@ -128,8 +128,8 @@ public class Parser {
         return parsePower();
     }
 
-    private Expression parseFunction(String name) {
-        var function = FunctionName.fromString(name);
+    private Expression parseFunction(String name, int nameStart) {
+        var function = FunctionName.fromString(name, nameStart);
 
         consume('(');
 
@@ -191,7 +191,7 @@ public class Parser {
 
         skipSpaces();
         if (peek() == '(') {
-            return parseFunction(name);
+            return parseFunction(name, start);
         }
 
         return new VariableExpression(name);

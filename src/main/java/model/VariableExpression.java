@@ -8,16 +8,14 @@ import java.util.Objects;
  */
 
 public record VariableExpression(String name) implements Expression {
+    /**
+     * Создаёт узел переменной с проверкой корректности имени.
+     *
+     * @param name имя переменной
+     * @throws NullPointerException     если {@code name == null}
+     * @throws IllegalArgumentException если имя пустое или состоит только из пробелов
+     */
     public VariableExpression {
-
-        /**
-         * Создаёт узел переменной с проверкой корректности имени.
-         *
-         * @param name имя переменной
-         * @throws NullPointerException     если {@code name == null}
-         * @throws IllegalArgumentException если имя пустое или состоит только из пробелов
-         */
-
         Objects.requireNonNull(name);
         if (name.isBlank()) {
             throw new IllegalArgumentException("Имя переменной не может быть пустым.");

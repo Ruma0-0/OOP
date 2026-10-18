@@ -1,6 +1,7 @@
 package model;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Вызов функции.
@@ -15,6 +16,7 @@ public record FunctionExpression(FunctionName function, List<Expression> argumen
      * @throws NullPointerException если {@code function} или {@code arguments} == null
      */
     public FunctionExpression {
+        Objects.requireNonNull(function);
         arguments = List.copyOf(arguments);
     }
 }

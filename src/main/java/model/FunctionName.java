@@ -33,17 +33,18 @@ public enum FunctionName {
      * Находит функцию по её текстовому имени.
      *
      * @param name имя функции
+     * @param position позиция функции в строке
      * @return соответствующая функция
      * @throws ExpressionException если функция с таким именем не найдена
      */
-    public static FunctionName fromString(String name) {
+    public static FunctionName fromString(String name, int position) {
         for (var function : values()) {
             if (function.name.equals(name)) {
                 return function;
             }
         }
 
-        throw new ExpressionException("Неизвестная функция" + name);
+        throw new ParseException("Неизвестная функция: " + name, position);
     }
     /**
      * @return ожидаемое количество аргументов
@@ -56,7 +57,8 @@ public enum FunctionName {
      * Проверяет, что передано ожидаемое количество аргументов.
      *
      * @param actualCount фактическое количество аргументов
-     * @throws ExpressionException если количество не совпадает
+     * @param position  позиция функции в строке
+     * @throws ParseException если количество не совпадает
      */
     public void checkArgumentCount(int actualCount, int position) {
         if(argumentCount != actualCount) {
