@@ -1,6 +1,5 @@
 package parser;
 
-import exceptions.ExpressionException;
 import exceptions.ParseException;
 import model.*;
 

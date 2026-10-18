@@ -1,8 +1,6 @@
 package model;
 
-import exceptions.ExpressionException;
 import exceptions.ParseException;
-import exceptions.UnknownVariableException;
 
 public enum FunctionName {
     MIN("min", 2),

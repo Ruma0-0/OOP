@@ -1,7 +1,5 @@
 package eval;
 
-import exceptions.DivisionByZeroException;
-import exceptions.ExpressionException;
 import exceptions.UnknownVariableException;
 import model.*;
 
