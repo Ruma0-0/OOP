@@ -47,6 +47,9 @@ public record BinaryExpression(BinaryOperator operator, Expression left, Express
         }
         if (lefts instanceof NumberExpression lN) {
             if (operator == BinaryOperator.DIVIDE && lN.value() == 0) {return new NumberExpression(0);}
+            if (operator == BinaryOperator.MULTIPLY && lN.value() == 0) {return new NumberExpression(0);}
+            if (operator == BinaryOperator.MULTIPLY && lN.value() == 1) {return rights;}
+            if (operator == BinaryOperator.ADD && lN.value() == 0) {return rights;}
         }
         return new BinaryExpression(operator, lefts, rights);
     }
