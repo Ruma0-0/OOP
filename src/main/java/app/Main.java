@@ -1,6 +1,7 @@
 package app;
 
 import eval.Evaluator;
+import derivator.Derivator;
 import exceptions.ExpressionException;
 import exceptions.ParseException;
 import model.*;
@@ -83,6 +84,8 @@ public class Main {
             System.out.println("Значение: " + value);
             System.out.println("Строковое представление: " + tree.format());
             System.out.println("Свертка констант: " + tree.simplify().format());
+            var derivator = new Derivator().derivate(tree, "x");
+            System.out.println("Посимвольное дифференцирование: " + derivator.simplify().format());
         } catch (ParseException e) {
             System.out.println("Ошибка разбора: " + e.getMessage());
             System.out.println(input);
