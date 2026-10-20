@@ -7,28 +7,28 @@ import exceptions.DivisionByZeroException;
  */
 public enum BinaryOperator {
     /**Сложение.*/
-    ADD(3, Associativity.LEFT) {
+    ADD(3, Associativity.LEFT, "+") {
         @Override
         public double calculate(double a, double b) {
             return a + b;
         }
     },
     /**Вычитание.*/
-    SUBTRACT(3, Associativity.LEFT) {
+    SUBTRACT(3, Associativity.LEFT, "-") {
         @Override
         public double calculate(double a, double b) {
             return a - b;
         }
     },
     /**Умножение.*/
-    MULTIPLY(2, Associativity.LEFT) {
+    MULTIPLY(2, Associativity.LEFT, "*") {
         @Override
         public double calculate(double a, double b) {
             return a * b;
         }
     },
     /**Деление. Бросает {@link DivisionByZeroException} при {@code b == 0}.*/
-    DIVIDE(2, Associativity.LEFT) {
+    DIVIDE(2, Associativity.LEFT, "/") {
         @Override
         public double calculate(double a, double b) {
             if (b == 0) {
@@ -38,7 +38,7 @@ public enum BinaryOperator {
         }
     },
     /**Возведение в степень.*/
-    POWER(1, Associativity.RIGHT) {
+    POWER(1, Associativity.RIGHT, "^") {
         @Override
         public double calculate(double a, double b) {
             return Math.pow(a, b);
@@ -47,10 +47,12 @@ public enum BinaryOperator {
 
     private final int priority;
     private final Associativity associativity;
+    private final String symbol;
 
-    BinaryOperator(int priority, Associativity associativity) {
+    BinaryOperator(int priority, Associativity associativity, String symbol) {
         this.priority = priority;
         this.associativity = associativity;
+        this.symbol = symbol;
     }
 
     /**
@@ -75,4 +77,6 @@ public enum BinaryOperator {
     public Associativity getAssociativity() {
         return associativity;
     }
+
+    public String getSymbol() {return symbol;}
 }

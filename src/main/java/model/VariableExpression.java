@@ -21,4 +21,24 @@ public record VariableExpression(String name) implements Expression {
             throw new IllegalArgumentException("Имя переменной не может быть пустым.");
         }
     }
+
+    /**
+     * Возвращает строковое представление выражения
+     *
+     * @return строковое представление выражения
+     */
+    @Override
+    public String format() {
+        return name;
+    }
+
+    /**
+     * Возвращает упрощённую версию данного выражения.
+     *
+     * @return упрощённое выражение;
+     */
+    @Override
+    public Expression simplify() {
+        return this;
+    }
 }

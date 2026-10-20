@@ -18,12 +18,20 @@ public class Main {
 
         demo("2 + 3 * 4", Map.of());
         demo("(2 + 3) * 4", Map.of());
-        demo("-2^2", Map.of());
-        demo("2^3^2", Map.of());
+        demo("- 2 ^ 2", Map.of());
+        demo("(-2) ^ 2", Map.of());
+        demo("2 ^ 3 ^ 2", Map.of());
         demo("2 * -3", Map.of());
-        demo("x^2 + 2*x + 1", Map.of("x", 3.0));
+        demo("x ^ 2 + 2 * x + 1", Map.of("x", 2.0));
         demo("min(15, 3) + abs(-5)", Map.of());
         demo("max(10, 20) / 2", Map.of());
+        demo("--3", Map.of());
+        demo("-(3 + 5)", Map.of());
+        demo("-3 + 5", Map.of());
+        demo("3   + (2 + (5^1 + 2) + 3)", Map.of());
+        demo("4^(-2)", Map.of());
+        demo("x + 0 + x ^ 1 + x ^ 0 + x * 1 + x * 0", Map.of("x", 3.0));
+        demo("2 * 3 + x", Map.of("x", 12.0));
 
         demo("1 / 0", Map.of());
         demo("y + 1", Map.of("x", 1.0));
@@ -37,10 +45,16 @@ public class Main {
         var nodes = new ArrayList<Expression>();
         for (int i = 1; i <= 5; i++) nodes.add(new NumberExpression(i));
 
-        for (String v : List.of("x", "y", "z", "alpha", "beta")) nodes.add(new VariableExpression(v));
+        nodes.add(new NumberExpression(1.0));
+        nodes.add(new NumberExpression(-3));
+        nodes.add(new NumberExpression(0.5));
+        nodes.add(new NumberExpression(3.14159));
+
+        for (String v : List.of("x", "x1", "y", "z", "alpha", "beta")) nodes.add(new VariableExpression(v));
 
         nodes.add(new UnaryExpression(UnaryOperator.NEGATE, new NumberExpression(1)));
         nodes.add(new UnaryExpression(UnaryOperator.NEGATE, new VariableExpression("x")));
+        nodes.add(new UnaryExpression(UnaryOperator.NEGATE, new UnaryExpression(UnaryOperator.NEGATE, new VariableExpression("x"))));
 
         for (var op : BinaryOperator.values()) {
             nodes.add(new BinaryExpression(op, new NumberExpression(1), new NumberExpression(2)));
@@ -56,6 +70,8 @@ public class Main {
         nodes.add(new BinaryExpression(BinaryOperator.POWER, new VariableExpression("x"), new NumberExpression(2)));
         nodes.add(new UnaryExpression(UnaryOperator.NEGATE, new BinaryExpression(BinaryOperator.ADD, new NumberExpression(1), new NumberExpression(2))));
 
+        nodes.add(new FunctionExpression(FunctionName.MIN, List.of(new NumberExpression(21), new FunctionExpression(FunctionName.ABS, List.of(new NumberExpression(-30))))));
+
         return nodes;
     }
     private static void demo(String input, Map<String, Double> context) {
@@ -65,6 +81,8 @@ public class Main {
             System.out.println("Дерево: " + tree);
             var value = new Evaluator().evaluate(tree, context);
             System.out.println("Значение: " + value);
+            System.out.println("Строковое представление: " + tree.format());
+            System.out.println("Свертка констант: " + tree.simplify().format());
         } catch (ParseException e) {
             System.out.println("Ошибка разбора: " + e.getMessage());
             System.out.println(input);

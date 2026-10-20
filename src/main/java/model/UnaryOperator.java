@@ -5,5 +5,11 @@ package model;
  */
 public enum UnaryOperator {
     /** Смена знака.*/
-    NEGATE
+    NEGATE( "-");
+
+    private final String symbol;
+    UnaryOperator(String c) {
+        symbol = c;
+    }
+    public String getSymbol() {return symbol;}
 }

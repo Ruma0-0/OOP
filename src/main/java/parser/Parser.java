@@ -121,7 +121,7 @@ public class Parser {
         if (peek() == '-') {
             consume('-');
 
-            var operand = parsePower();
+            var operand = parseUnary();
             return new UnaryExpression(UnaryOperator.NEGATE, operand);
         }
 
