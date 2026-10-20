@@ -1,6 +1,7 @@
 package parser;
 
 import exceptions.ParseException;
+import exceptions.UnknownFunctionException;
 import model.*;
 import org.junit.jupiter.api.Test;
 
@@ -64,7 +65,7 @@ class ParserTest {
 
     @Test
     void unknownFunctionThrowTest() {
-        var ex = assertThrows(ParseException.class,
+        var ex = assertThrows(UnknownFunctionException.class,
                 () -> new Parser("foo(1, 2)").parse());
         assertEquals(0, ex.getPosition());
     }

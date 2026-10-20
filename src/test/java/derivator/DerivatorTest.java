@@ -116,7 +116,7 @@ class DerivatorTest {
 
     @Test
     void throwsForVariableExponent() {
-        var tree = new Parser("x ^ y").parse();
+        var tree = new Parser("x ^ (x + 2)").parse();
         assertThrows(DerivateException.class, () -> derivator.derivate(tree, "x"));
     }
 

@@ -2,6 +2,7 @@ package app;
 
 import eval.Evaluator;
 import derivator.Derivator;
+import exceptions.DerivateException;
 import exceptions.ExpressionException;
 import exceptions.ParseException;
 import model.*;
@@ -90,6 +91,8 @@ public class Main {
             System.out.println("Ошибка разбора: " + e.getMessage());
             System.out.println(input);
             System.out.println(" ".repeat(Math.max(0, e.getPosition())) + "^");
+        } catch(DerivateException e){
+            System.out.println("Ошибка дифференцирвания: " + e.getMessage());
         } catch (ExpressionException e) {
             System.out.println("Ошибка вычисления: " + e.getMessage());
         }
