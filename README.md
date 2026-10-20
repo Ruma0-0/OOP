@@ -89,11 +89,4 @@ src/test/java/
 └── ...           - JUnit 5 тесты
 ```
 
-## Тесты
-
-Покрыто: разбор выражений, приоритеты операций, унарный минус,
-правоассоциативная степень, функции, вычисление с переменными,
-исключения (`ParseException` с позицией, `DivisionByZeroException`,
-`UnknownVariableException`), контракт `equals`/`HashCode`.
-
 Запуск: `mvn test`.
