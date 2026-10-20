@@ -1,5 +1,9 @@
 package model;
 
+import exceptions.ExpressionException;
+import exceptions.UnknownFunctionException;
+import exceptions.InvalidExpressionState;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -7,24 +11,25 @@ import java.util.Objects;
 /**
  * Вызов функции.
  *
- * @param function  имя функции
- * @param arguments список аргументов (неизменяемый)
+ * @param function  имя функции;
+ * @param arguments список аргументов (неизменяемый);
  */
 public record FunctionExpression(FunctionName function, List<Expression> arguments) implements Expression {
     /**
-     * @param function  имя функции
-     * @param arguments аргументы
-     * @throws NullPointerException если {@code function} или {@code arguments} == null
+     * @param function  имя функции;
+     * @param arguments аргументы;
+     * @throws InvalidExpressionState если {@code function} или {@code arguments} == null;
      */
     public FunctionExpression {
-        Objects.requireNonNull(function);
+        if (function == null) {throw new InvalidExpressionState("Имя функции не может быть пустым");}
+        if (arguments == null) {throw new InvalidExpressionState("Список аргументов функции не может быть пустым");}
         arguments = List.copyOf(arguments);
     }
 
     /**
-     * Возвращает строковое представление выражения
+     * Возвращает строковое представление выражения.
      *
-     * @return строковое представление выражения
+     * @return строковое представление выражения;
      */
     @Override
     public String format() {
@@ -48,6 +53,7 @@ public record FunctionExpression(FunctionName function, List<Expression> argumen
      * Возвращает упрощённую версию данного выражения.
      *
      * @return упрощённое выражение;
+     * @throws UnknownFunctionException если введена неизвестная функция;
      */
     @Override
     public Expression simplify() {
@@ -86,7 +92,7 @@ public record FunctionExpression(FunctionName function, List<Expression> argumen
                 case ABS -> {
                     result = Math.abs(((NumberExpression) simplifiedArgs.getFirst()).value());
                 }
-                default -> throw new IllegalStateException("Неизвестная функция: " + function);
+                default -> throw new UnknownFunctionException(function.getName());
             }
             return new NumberExpression(result);
         }

@@ -6,6 +6,13 @@ import model.*;
 import java.util.Map;
 
 public class Evaluator {
+    /**
+     * Вычисление синтаксического дерева выражения.
+     * @param expression вычисляемое выражение;
+     * @param context контекст переменных;
+     * @return значение выражения;
+     * @throws UnknownVariableException если встречается переменная, не заданная в контексте;
+     */
     public double evaluate(Expression expression, Map<String, Double> context) {
         return switch (expression) {
             case NumberExpression n -> n.value();

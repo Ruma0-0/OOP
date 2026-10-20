@@ -1,11 +1,19 @@
 package derivator;
 
+import exceptions.DerivateException;
 import exceptions.ExpressionException;
 import model.*;
 
 import java.util.List;
 
 public class Derivator {
+    /**
+     * Нахождение производной выражения по заданной переменной.
+     * @param expression дифференцируемое выражение;
+     * @param variable переменная, по которой проводится дифференцирование;
+     * @return производная исходного выражения;
+     * @throws DerivateException если встречаются выражения, которые программа неспособна продифференцировать;
+     */
     public Expression derivate(Expression expression, String variable) {
         return switch(expression) {
             case NumberExpression n -> new NumberExpression(0);
@@ -41,7 +49,7 @@ public class Derivator {
             return new BinaryExpression(BinaryOperator.MULTIPLY, du, new BinaryExpression(BinaryOperator.MULTIPLY, new NumberExpression(n.value()), new BinaryExpression(BinaryOperator.POWER, u, new NumberExpression(n.value() - 1))));
         }
 
-        throw new ExpressionException("Дифференцирование показательных функций не поддерживается");
+        throw new DerivateException("Дифференцирование показательных функций не поддерживается");
     }
 
     private Expression derivateFunction(FunctionExpression f, String variable) {
@@ -51,7 +59,7 @@ public class Derivator {
                 var du = derivate(u, variable);
                 yield new BinaryExpression(BinaryOperator.MULTIPLY, du, new BinaryExpression(BinaryOperator.DIVIDE, new VariableExpression(variable), new FunctionExpression(FunctionName.ABS, List.of(u))));
             }
-            case MIN, MAX -> throw new ExpressionException("Дифференцирование функции " + f.function().getName() + " не поддерживается.");
+            case MIN, MAX -> throw new DerivateException("Дифференцирование функции " + f.function().getName() + " не поддерживается.");
         };
     }
 }

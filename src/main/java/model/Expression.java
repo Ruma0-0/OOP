@@ -36,7 +36,7 @@ sealed public interface Expression
         var text = child.format();
         return switch (child) {
             case BinaryExpression b -> needsParentheses(b.operator(), parent, isRightChild) ? "(" + text + ")" : text;
-            case UnaryExpression u -> needsParentheses(u.operator(), parent, isRightChild) ? "(" + text + ")" : text;
+            case UnaryExpression u -> needsParentheses(parent, isRightChild) ? "(" + text + ")" : text;
             case NumberExpression n -> text;
             case VariableExpression v -> text;
             case FunctionExpression f -> text;
@@ -50,7 +50,7 @@ sealed public interface Expression
      * @param parent оператор родителя
      * @param isRightChild является ли дочерняя операция правым операндом родителя
      *
-     * @return нужно ли печатать скобки вокруг дочерней операции
+     * @return {@code true}, если скобки необходимы. Иначе {@code false}.
      */
     default boolean needsParentheses(BinaryOperator child, BinaryOperator parent, boolean isRightChild) {
         if (parent == null) {return false;}
@@ -66,9 +66,16 @@ sealed public interface Expression
         return !isRightChild;
     }
 
-    default boolean needsParentheses(UnaryOperator child, BinaryOperator parent, boolean isRightChild) {
+    /**
+     * Определяет необходимость скобок в случаях с унарными операциями.
+     *
+     * @param parent оператор родителя
+     * @param isRightChild является ли потомок правым для родителя
+     *
+     * @return @return {@code true}, если скобки необходимы. Иначе {@code false}.
+     */
+    default boolean needsParentheses(BinaryOperator parent, boolean isRightChild) {
         if (parent == null) {return false;}
-
         return !isRightChild && parent == BinaryOperator.POWER;
     }
 }

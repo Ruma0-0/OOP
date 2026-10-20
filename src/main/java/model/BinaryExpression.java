@@ -10,7 +10,7 @@ import exceptions.DivisionByZeroException;
  */
 public record BinaryExpression(BinaryOperator operator, Expression left, Expression right) implements Expression {
     /**
-     * Возвращает строковое представление выражения
+     * Возвращает строковое представление выражения.
      *
      * @return строковое представление выражения
      */
@@ -25,7 +25,7 @@ public record BinaryExpression(BinaryOperator operator, Expression left, Express
     /**
      * Возвращает упрощённую версию данного выражения.
      *
-     * @return упрощённое выражение;
+     * @return упрощённое выражение
      */
     @Override
     public Expression simplify() {

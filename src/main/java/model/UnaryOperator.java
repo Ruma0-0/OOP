@@ -11,5 +11,10 @@ public enum UnaryOperator {
     UnaryOperator(String c) {
         symbol = c;
     }
+
+    /**
+     *
+     * @return оператор унарной операции;
+     */
     public String getSymbol() {return symbol;}
 }

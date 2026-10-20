@@ -1,13 +1,13 @@
 package model;
 /**
  * Узел дерева выражения, представляющий числовую константу.
- * @param value значение числа
+ * @param value значение числа;
  */
 public record NumberExpression(double value) implements Expression{
     /**
-     * Возвращает строковое представление выражения
+     * Возвращает строковое представление выражения.
      *
-     * @return строковое представление выражения
+     * @return строковое представление выражения;
      */
     @Override
     public String format() {

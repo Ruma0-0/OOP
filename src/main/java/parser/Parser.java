@@ -5,14 +5,29 @@ import model.*;
 
 import java.util.ArrayList;
 
+/**
+ * Парсер, составляющий синтаксическое дерево введённого в строку выражения.
+ */
 public class Parser {
     private final String input;
     private int position;
 
+    /**
+     *
+     * @param input входная строка, содержащая в себе арифметическое выражение;
+     */
     public Parser(String input) {
         this.input = input;
         this.position = 0;
     }
+
+    /**
+     * Считывает выражение из строки, составляя дерево выражения.
+     * @return синтаксическое дерево выражения;
+     * @throws ParseException если строка содержит синтаксическую ошибку:
+     *                          неожиданный символ, незакрытые скобки, отсутствие операнда,
+     *                          неверное число аргументов функции или незакрытую функцию;
+     */
     public Expression parse() {
         var result = parseAdditive();
         skipSpaces();

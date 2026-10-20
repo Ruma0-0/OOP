@@ -1,7 +1,7 @@
 package model;
 
-import exceptions.ExpressionException;
 import exceptions.ParseException;
+import exceptions.UnknownFunctionException;
 
 /**
  * Встроенные функции с фиксированным количеством аргументов.
@@ -23,7 +23,7 @@ public enum FunctionName {
     }
 
     /**
-     * @return текстовое имя функции (как в выражении)
+     * @return текстовое имя функции;
      */
     public String getName() {
         return name;
@@ -32,10 +32,10 @@ public enum FunctionName {
     /**
      * Находит функцию по её текстовому имени.
      *
-     * @param name имя функции
-     * @param position позиция функции в строке
-     * @return соответствующая функция
-     * @throws ExpressionException если функция с таким именем не найдена
+     * @param name имя функции;
+     * @param position позиция функции в строке;
+     * @return соответствующая функция;
+     * @throws UnknownFunctionException если функция с таким именем не найдена;
      */
     public static FunctionName fromString(String name, int position) {
         for (var function : values()) {
@@ -44,21 +44,15 @@ public enum FunctionName {
             }
         }
 
-        throw new ParseException("Неизвестная функция: " + name, position);
-    }
-    /**
-     * @return ожидаемое количество аргументов
-     */
-    public int getArgumentCount() {
-        return argumentCount;
+        throw new UnknownFunctionException(name, position);
     }
 
     /**
      * Проверяет, что передано ожидаемое количество аргументов.
      *
-     * @param actualCount фактическое количество аргументов
-     * @param position  позиция функции в строке
-     * @throws ParseException если количество не совпадает
+     * @param actualCount фактическое количество аргументов;
+     * @param position  позиция функции в строке;
+     * @throws ParseException если количество фактически переданных аргументов не совпадает с ожидаемым;
      */
     public void checkArgumentCount(int actualCount, int position) {
         if(argumentCount != actualCount) {

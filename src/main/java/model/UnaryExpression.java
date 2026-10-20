@@ -3,14 +3,14 @@ package model;
 /**
  * Узел дерева выражения, представляющий унарную операцию над одним операндом.
  *
- * @param operator операция
- * @param operand операнд
+ * @param operator операция;
+ * @param operand операнд;
  */
 public record UnaryExpression(UnaryOperator operator, Expression operand) implements Expression {
     /**
-     * Возвращает строковое представление выражения
+     * Возвращает строковое представление выражения.
      *
-     * @return строковое представление выражения
+     * @return строковое представление выражения;
      */
     @Override
     public String format() {

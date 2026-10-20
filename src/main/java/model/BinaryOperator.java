@@ -78,5 +78,8 @@ public enum BinaryOperator {
         return associativity;
     }
 
+    /**
+     * @return символ арифметической операции
+     */
     public String getSymbol() {return symbol;}
 }
