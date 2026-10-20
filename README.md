@@ -1,0 +1,106 @@
+# Интерпретатор арифметических выражений
+
+Библиотека классов на Java 21 и консольное приложение для разбора и вычисления арифметических выражений. Строка разбирается методом рекурсивного спуска в синтаксическое дерево, после чего дерево вычисляется с учётом значений переменных из контекста.
+
+## Возможности
+
+- 4 арифметические операции: `+`, `-`, `*`, `/`;
+- возведение в степень: `^`;
+- унарный минус;
+- скобки;
+- функции `min(a, b)`, `max(a, b)`, `abs(x)`;
+- десятичные дроби.
+
+## Грамматика
+```
+expression := additive
+additive := multiplicative { ("+" | "-") multiplicative }
+multiplicative := unary { ("*" | "/") unary }
+unary := "-" unary | power
+power := primary [ "^" unary ]
+primary := number | variable | function | "(" additive ")"
+function := name "(" [ additive { "," additive } ] ")"
+number := digit { digit } [ "." digit { digit } ]
+variable := letter { letter | digit }
+```
+
+
+**Приоритеты**(*от высшего к низшему*):  степень `^` → унарный минус → `*` `/` → `+` `-`.
+Операторы `+` `-` `*` `/` левоассоциативны, `^` правоассоциативен.
+
+## Модель
+
+Выражение представлено **закрытой иерархией** (`sealed interface Expression`)
+из пяти видов узлов:
+
+- `NumberExpression` — числовая константа (`2`, `3.14`);
+- `VariableExpression` — переменная (`x`, `y`);
+- `UnaryExpression` — унарная операция (`-x`);
+- `BinaryExpression` — бинарная операция (`a + b`, `a ^ b`);
+- `FunctionExpression` — вызов функции (`min(a, b)`, `abs(x)`).
+
+Операции описаны перечислениями:
+
+- `BinaryOperator` — `+`, `-`, `*`, `/`, `^` с приоритетом,
+  ассоциативностью и вычислением в теле константы;
+- `UnaryOperator` — унарный минус;
+- `FunctionName` — `min`, `max`, `abs`.
+
+Исключения:
+
+- `ParseException` — синтаксическая ошибка с позицией в строке;
+- `DivisionByZeroException` — деление на ноль;
+- `UnknownVariableException` — переменная не найдена в контексте.
+
+
+## Требования
+
+- Java 21
+- Maven 3.8+
+
+## Сборка и запуск
+
+```bash
+# Запустить тесты
+mvn test
+
+# Собрать проект
+mvn package
+
+# Запустить демонстрацию
+java -cp target/classes app.Main
+```
+
+## Пример использования
+
+```java
+var parser = new Parser("x^2 + 2*x + 1");
+var tree = parser.parse();
+
+var evaluator = new Evaluator();
+double result = evaluator.evaluate(tree, Map.of("x", 3.0));
+// result == 16.0
+```
+
+## Структура проекта
+
+```
+src/main/java/
+├── app/          — точка входа, демонстрация
+├── model/        — модель выражения (sealed иерархия, enum-ы)
+├── parser/       — разбор строки рекурсивным спуском
+├── eval/         — вычисление дерева
+└── exceptions/   — собственные исключения
+
+src/test/java/
+└── ...           — JUnit 5 тесты
+```
+
+## Тесты
+
+Покрыто: разбор выражений, приоритеты операций, унарный минус,
+правоассоциативная степень, функции, вычисление с переменными,
+исключения (`ParseException` с позицией, `DivisionByZeroException`,
+`UnknownVariableException`), контракт `equals`/`HashCode`.
+
+Запуск: `mvn test`.
